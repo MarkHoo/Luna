@@ -237,5 +237,5 @@ class DownloadManager {
   }
 }
 
-export const NetworkDetector = NetworkDetector
+export { NetworkDetector }
 export const downloader = new DownloadManager()

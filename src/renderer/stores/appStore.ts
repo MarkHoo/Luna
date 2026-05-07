@@ -35,7 +35,7 @@ export interface DownloadTask {
 }
 
 export interface LlamaLog {
-  type: 'info' | 'error' | 'warning'
+  type: 'info' | 'error' | 'warning' | 'success'
   message: string
   timestamp: string
 }

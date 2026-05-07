@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useAppStore } from '../stores/appStore'
+import { useAppStore, LocalModel } from '../stores/appStore'
 import { Rocket, Square, ExternalLink, Trash2, Settings, Terminal, AlertCircle, CheckCircle, XCircle, FolderOpen } from 'lucide-react'
 import clsx from 'clsx'
 
