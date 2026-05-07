@@ -1,1 +1,43 @@
-"use strict";const n=require("electron"),i={network:{detect:()=>n.ipcRenderer.invoke("network:detect"),selectSource:e=>n.ipcRenderer.invoke("network:select-source",e)},download:{start:(e,r,o)=>n.ipcRenderer.invoke("download:start",e,r,o),pause:e=>n.ipcRenderer.invoke("download:pause",e),resume:e=>n.ipcRenderer.invoke("download:resume",e),cancel:e=>n.ipcRenderer.invoke("download:cancel",e),onProgress:e=>{const r=(o,t)=>e(t);return n.ipcRenderer.on("download:progress",r),()=>n.ipcRenderer.removeListener("download:progress",r)}},llama:{start:(e,r)=>n.ipcRenderer.invoke("llama:start",e,r),stop:()=>n.ipcRenderer.invoke("llama:stop"),status:()=>n.ipcRenderer.invoke("llama:status"),onLog:e=>{const r=(o,t)=>e(t);return n.ipcRenderer.on("llama:log",r),()=>n.ipcRenderer.removeListener("llama:log",r)}},file:{getModels:()=>n.ipcRenderer.invoke("file:get-models"),deleteModel:e=>n.ipcRenderer.invoke("file:delete-model",e),getSettings:()=>n.ipcRenderer.invoke("file:get-settings"),saveSettings:e=>n.ipcRenderer.invoke("file:save-settings",e),selectPath:()=>n.ipcRenderer.invoke("file:select-path")},shell:{openExternal:e=>n.ipcRenderer.invoke("shell:open-external",e)},system:{getInfo:()=>n.ipcRenderer.invoke("system:get-info")}};n.contextBridge.exposeInMainWorld("luna",i);
+"use strict";
+const electron = require("electron");
+const api = {
+  network: {
+    detect: () => electron.ipcRenderer.invoke("network:detect"),
+    selectSource: (source) => electron.ipcRenderer.invoke("network:select-source", source)
+  },
+  download: {
+    start: (modelId, source, url) => electron.ipcRenderer.invoke("download:start", modelId, source, url),
+    pause: (taskId) => electron.ipcRenderer.invoke("download:pause", taskId),
+    resume: (taskId) => electron.ipcRenderer.invoke("download:resume", taskId),
+    cancel: (taskId) => electron.ipcRenderer.invoke("download:cancel", taskId),
+    onProgress: (callback) => {
+      const handler = (_, progress) => callback(progress);
+      electron.ipcRenderer.on("download:progress", handler);
+      return () => electron.ipcRenderer.removeListener("download:progress", handler);
+    }
+  },
+  llama: {
+    start: (modelPath, params) => electron.ipcRenderer.invoke("llama:start", modelPath, params),
+    stop: () => electron.ipcRenderer.invoke("llama:stop"),
+    status: () => electron.ipcRenderer.invoke("llama:status"),
+    onLog: (callback) => {
+      const handler = (_, log) => callback(log);
+      electron.ipcRenderer.on("llama:log", handler);
+      return () => electron.ipcRenderer.removeListener("llama:log", handler);
+    }
+  },
+  file: {
+    getModels: () => electron.ipcRenderer.invoke("file:get-models"),
+    deleteModel: (modelPath) => electron.ipcRenderer.invoke("file:delete-model", modelPath),
+    getSettings: () => electron.ipcRenderer.invoke("file:get-settings"),
+    saveSettings: (settings) => electron.ipcRenderer.invoke("file:save-settings", settings),
+    selectPath: () => electron.ipcRenderer.invoke("file:select-path")
+  },
+  shell: {
+    openExternal: (url) => electron.ipcRenderer.invoke("shell:open-external", url)
+  },
+  system: {
+    getInfo: () => electron.ipcRenderer.invoke("system:get-info")
+  }
+};
+electron.contextBridge.exposeInMainWorld("luna", api);
